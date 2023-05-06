@@ -1,4 +1,3 @@
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material"
 import { Product } from "../app/models/products"
 import ProductCard from "./ProductCard"
 
@@ -9,15 +8,15 @@ export default function ProductList(props:Props) {
     const {products} = props
 
     return (
-        <List>
+        <li>
             {
                 products &&
-                    products.map((product,index)=>{
+                    products.map((product)=>{
                         return (
                             <ProductCard key={product.id} product={product}/>
                         )
                     })
             }
-        </List>
+        </li>
     )
 }
