@@ -1,4 +1,4 @@
-import { Product } from "../app/models/products"
+import { Product } from "../../models/products"
 import ProductCard from "./ProductCard"
 
 type Props = {

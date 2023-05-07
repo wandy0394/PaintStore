@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Product } from "../app/models/products";
+import { Product } from "../models/products";
 
 const URL = "http://localhost:5093/api/products"
 

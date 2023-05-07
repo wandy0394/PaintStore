@@ -1,4 +1,6 @@
-export default function Hero() {
+
+
+function Hero() {
     const tagline:string = "Find everything you need to bring your worlds to life"
     const title:string = "Craft your vision"
     return (
@@ -9,6 +11,22 @@ export default function Hero() {
                     <p>{tagline.toUpperCase()}</p>
                 </div>
             </div>
+        </div>
+    )
+}
+
+export default function Landing() {
+    return (
+        <div className='w-full grid grid-rows-2 flex-1'>
+            <Hero/>
+            <div className='w-full grid md:grid-cols-3'>
+                <div className='w-full bg-red-500'>
+                </div>
+                <div className='w-full bg-green-500'>
+                </div>
+                <div className='w-full bg-blue-500'>
+                </div>
+            </div>  
         </div>
     )
 }
