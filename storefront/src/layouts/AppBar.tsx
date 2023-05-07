@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const linkStyle = 'w-full h-full flex items-center justify-center'
+const links = [
+    {index:0, label:'Paints', link:'/catalog/paints'},
+    {index:1, label:'Brushes', link:'/catalog/brushes'},
+    {index:2, label:'Accessories', link:'/catalog/accessories'},
+    {index:3, label:'Brands', link:'/catalog/brands'},
+    {index:4, label:'Contact', link:'/catalog/contact'},
+]
 
 export default function AppBar() {
+    const location = useLocation()
     return (
         <div className="w-full navbar bg-base-300">
             <div className="navbar-start">
@@ -18,35 +26,21 @@ export default function AppBar() {
                 </div>
             </div>
             <div className='navbar-center flex items-center justify-center gap-2'>
-
-                <div className="btn btn-ghost normal-case">
-                    <Link className={linkStyle} to='/catalog/paints'>
-                        Paints
-                    </Link>
-                </div>
-                <div className="btn btn-ghost normal-case">
-                    <Link className={linkStyle} to='/catalog/brushes'>
-                        Brushes
-                    </Link>
-                </div>
-                <div className="btn btn-ghost normal-case">
-                    <Link className={linkStyle} to='/catalog/Accessories'>
-                        Accessories
-                    </Link>
-                </div>
-                <div className="btn btn-ghost normal-case">
-                    <Link className={linkStyle} to='/catalog/brands'>
-                        Brands
-                    </Link>
-                </div>
-                <div className="btn btn-ghost normal-case">
-                    <Link className={linkStyle} to='/contact'>
-                        Contact
-                    </Link>
-                </div>
+                {
+                    links.map((link, index)=>{
+                        return (
+                            <div key={index} className={`btn btn-ghost normal-case ${(location.pathname === link.link) && 'bg-slate-400'}`}>
+                                <Link className={linkStyle} to={link.link}>
+                                    {link.label}
+                                </Link>
+                            </div>
+                        )
+                    })
+                }
+             
             </div>
             <div className="navbar-end">
-
+                
             </div>
         </div>
     )

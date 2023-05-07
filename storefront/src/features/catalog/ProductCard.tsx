@@ -13,7 +13,6 @@ export default function ProductCard(props:Props) {
 
     return (
         <div key={product.id} className="card card-compact w-full bg-base-300 shadow-xl">
-            {/* <div className='w-full'>{product.name}</div> */}
             <h2 className="card-title p-4 w-full h-24">{product.name}</h2>
             <figure><img src={product.imageUrl} alt="Product" /></figure>
             <div className="card-body">
