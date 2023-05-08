@@ -20,7 +20,7 @@ export default function ProductCard(props:Props) {
                 {/* <figure><img src={product.imageUrl} alt="Product" /></figure> */}
                 <ProductImage product={product}/>
                 <div className="card-body">
-                    <p className='w-full text-center text-2xl'>{product.price}</p>
+                    <p className='w-full text-center text-2xl'>{`$${product.price/100}`}</p>
                     <div className="card-actions justify-center">
                         <QuantityCounter value={value} setValue={setValue}/>
                         <button className="btn btn-primary">Add to cart</button>

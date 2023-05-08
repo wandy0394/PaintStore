@@ -29,10 +29,12 @@ export default function ProductDetails() {
                                     <div className='text-2xl font-bold'>{product.name}</div>
                                     <div className='text-xl'>{`$${product.price / 100}`}</div>
                                 </div>
-                                <div className='flex flex-col items-start gap-4'>
+                                <div className='flex flex-col md:items-start justify-center gap-4'>
                                     <p>{`We have ${product.quantityInStock} remaining in stock.`}</p>
-                                    <QuantityCounter value={value} setValue={setValue}/>
-                                    <div className='btn btn-primary'>Add to Cart</div>
+                                    <div className='w-full flex justify-center md:justify-start'>
+                                        <QuantityCounter value={value} setValue={setValue}/>
+                                    </div>
+                                    <div className='btn btn-primary w-full'>Add to Cart</div>
                                 </div>
                                 <div className='w-full h-full'>
                                     {product.description}
