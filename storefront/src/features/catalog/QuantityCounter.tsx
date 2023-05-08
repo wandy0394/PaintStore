@@ -16,7 +16,7 @@ export default function QuantityCounter(props:Props) {
         if (newValue <= MAX_QTY) setValue(newValue)
     }
     return (
-        <div className='w-full flex items-center justify-center gap-2'>
+        <div className='w-min flex items-center justify-center gap-2'>
             <button className='btn btn-ghost' onClick={handleDecrement}>-</button>
             <div className='text-lg'>{value}</div>
             <button className='btn btn-ghost' onClick={handleIncrement}>+</button>

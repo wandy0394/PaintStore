@@ -3,12 +3,14 @@ import Landing from '../pages/landing/Landing'
 // import Catalog from '../features/catalog/Catalog'
 import CatalogLayout from '../layouts/CatalogLayout'
 import Paints from '../pages/paints/Paints'
+import ProductDetails from '../features/catalog/ProductDetails'
 
 export default function AppRoutes() {
     return (
         <Routes>
             <Route index element={<Landing/>}/>
             <Route path="catalog" element={<CatalogLayout/>}>
+                <Route path=":productId" element={<ProductDetails/>}/>
                 <Route path="paints" element={<Paints/>}>
                     <Route path="acrylics" element={<h1>Acrylic Paints</h1>}/>    
                     <Route path="oils" element={<h1>Oil Paints</h1>}/>    

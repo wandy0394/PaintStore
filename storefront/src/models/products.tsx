@@ -6,5 +6,5 @@ export type Product = {
     imageUrl:string
     productType:string
     brand:string
-    quantityinStock:number
+    quantityInStock:number
 }
