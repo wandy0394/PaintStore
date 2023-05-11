@@ -4,9 +4,13 @@ import './App.css'
 import AppBar from '../layouts/AppBar'
 import Banner from '../layouts/Banner'
 import AppRoutes from '../routes/AppRoutes'
+import {ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 function App() {
   return (
-    <div className='w-full min-h-screen border border-red-500 flex flex-col items-center'>
+    <div className='w-full h-screen border border-red-500 flex flex-col items-center'>
+      <ToastContainer position='bottom-right' theme='colored'/>
       <div className='w-full h-[10vh]'>
         <Banner/>
       </div>

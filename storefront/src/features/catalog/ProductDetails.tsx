@@ -4,6 +4,8 @@ import { Product } from "../../models/products"
 import ProductImage from "./ProductImage"
 import QuantityCounter from "./QuantityCounter"
 import { useState } from "react"
+import NotFound from "../../app/errors/NotFound"
+import LoadingComponent from "../../layouts/LoadingComponent"
 
 
 
@@ -11,7 +13,8 @@ import { useState } from "react"
 export default function ProductDetails() {
     const {productId} = useParams<string>()
     const [value, setValue] = useState<number>(1)
-    const product:Product = useGetProductById(productId)
+    const [product, isLoading] = useGetProductById(productId)
+    if (isLoading) return <LoadingComponent message='Loading product details...'/>
 
     return (
         <div className='w-full h-full flex items-center justify-center px-32'>
@@ -19,28 +22,31 @@ export default function ProductDetails() {
                 {
                     product &&
                     <div className='w-full h-full grid md:grid-cols-2 gap-4'>
-                            <div className='w-full flex items-center justify-center'>
-                                <ProductImage product={product}/>
+                        <div className='w-full flex items-center justify-center'>
+                            <ProductImage product={product}/>
+                        </div>
+                        <div className='w-full h-full grid grid-rows-[1fr_1fr_2fr] px-4 gap-4'>
+                            
+                            <div className='w-full  flex flex-col items-start justify-center'>
+                                <div className='text-sm'>{product.brand}</div>
+                                <div className='text-2xl font-bold'>{product.name}</div>
+                                <div className='text-xl'>{`$${product.price / 100}`}</div>
                             </div>
-                            <div className='w-full h-full grid grid-rows-[1fr_1fr_2fr] px-4 gap-4'>
-                                
-                                <div className='w-full  flex flex-col items-start justify-center'>
-                                    <div className='text-sm'>{product.brand}</div>
-                                    <div className='text-2xl font-bold'>{product.name}</div>
-                                    <div className='text-xl'>{`$${product.price / 100}`}</div>
+                            <div className='flex flex-col md:items-start justify-center gap-4'>
+                                <p>{`We have ${product.quantityInStock} remaining in stock.`}</p>
+                                <div className='w-full flex justify-center md:justify-start'>
+                                    <QuantityCounter value={value} setValue={setValue}/>
                                 </div>
-                                <div className='flex flex-col md:items-start justify-center gap-4'>
-                                    <p>{`We have ${product.quantityInStock} remaining in stock.`}</p>
-                                    <div className='w-full flex justify-center md:justify-start'>
-                                        <QuantityCounter value={value} setValue={setValue}/>
-                                    </div>
-                                    <div className='btn btn-primary w-full'>Add to Cart</div>
-                                </div>
-                                <div className='w-full h-full'>
-                                    {product.description}
-                                </div>
+                                <div className='btn btn-primary w-full'>Add to Cart</div>
+                            </div>
+                            <div className='w-full h-full'>
+                                {product.description}
                             </div>
                         </div>
+                    </div>
+                }
+                {
+                    !product && <NotFound/>
                 }
                 <div className='w-full h-full'>
                     Reviews

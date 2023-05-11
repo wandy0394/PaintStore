@@ -6,7 +6,7 @@ const links = [
     {index:1, label:'Brushes', link:'/catalog/brushes'},
     {index:2, label:'Accessories', link:'/catalog/accessories'},
     {index:3, label:'Brands', link:'/catalog/brands'},
-    {index:4, label:'Contact', link:'/catalog/contact'},
+    {index:4, label:'Contact', link:'/contact'},
 ]
 
 export default function AppBar() {

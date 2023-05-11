@@ -4,6 +4,9 @@ import Landing from '../pages/landing/Landing'
 import CatalogLayout from '../layouts/CatalogLayout'
 import Paints from '../pages/paints/Paints'
 import ProductDetails from '../features/catalog/ProductDetails'
+import Contact from '../pages/Contact'
+import ServerError from '../app/errors/ServerError'
+import NotFound from '../app/errors/NotFound'
 
 export default function AppRoutes() {
     return (
@@ -16,14 +19,15 @@ export default function AppRoutes() {
                     <Route path="oils" element={<h1>Oil Paints</h1>}/>    
                     <Route path="enamels" element={<h1>Enamels Paints</h1>}/>    
                     <Route path="lacquers" element={<h1>Lacquer Paints</h1>}/>    
-                    <Route path="*" element={<h1>Error 404: Page not found</h1>}/>
+                    <Route path="*" element={<NotFound/>}/>
                 </Route>
                 <Route path="brushes" element={<h1>Brushes</h1>}/>
                 <Route path="accessories" element={<h1>Accessories</h1>}/>
-                <Route path="*" element={<h1>Error 404: Page not found</h1>}/>
+                <Route path="*" element={<NotFound/>}/>
             </Route>
-            <Route path="contact" element={<h1>Contact</h1>}/>
-            <Route path="*" element={<h1>Error 404: Page not found</h1>}/>
+            <Route path="contact" element={<Contact/>}/>
+            <Route path="server-error" element={<ServerError/>}/>
+            <Route path="*" element={<NotFound/>}/>
         </Routes>
     )
 }
