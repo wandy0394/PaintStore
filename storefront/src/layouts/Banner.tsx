@@ -8,6 +8,7 @@ export default function Banner() {
                     Crafted Colours
                 </Link>
             </h2>
+            
             <h3 className='font-medium'>Every World, Every Scale</h3>
         </div>
     )

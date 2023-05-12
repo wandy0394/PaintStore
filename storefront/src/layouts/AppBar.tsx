@@ -9,10 +9,12 @@ const links = [
     {index:4, label:'Contact', link:'/contact'},
 ]
 
+
+
 export default function AppBar() {
     const location = useLocation()
     return (
-        <div className="w-full navbar bg-base-300">
+        <div className="w-full navbar bg-base-300 px-16">
             <div className="navbar-start">
                 <div className="dropdown md:hidden">
                     <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -39,8 +41,22 @@ export default function AppBar() {
                 }
              
             </div>
-            <div className="navbar-end">
-                
+            <div className="navbar-end flex items-center justify-end">
+                <div  className={`btn btn-ghost normal-case`}>
+                    <Link className={linkStyle} to='/cart'>
+                        Cart
+                    </Link>
+                </div>            
+                <div  className={`btn btn-ghost normal-case`}>
+                    <Link className={linkStyle} to='/'>
+                        Login
+                    </Link>
+                </div>   
+                <div  className={`btn btn-ghost normal-case`}>
+                    <Link className={linkStyle} to='/'>
+                        Register
+                    </Link>
+                </div>       
             </div>
         </div>
     )

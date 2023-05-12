@@ -18,31 +18,37 @@ namespace api.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetCart")]
         public async Task<ActionResult<CartDTO>> GetBasket()
         {
             var cart = await RetrieveBasket();
 
             if (cart == null) return NotFound();
             // return Ok();
+            return MapCartToDTO(cart);
+        }
+
+        private static CartDTO MapCartToDTO(Cart cart)
+        {
             return new CartDTO
             {
-                Id=cart.Id,
-                BuyerId=cart.BuyerId,
+                Id = cart.Id,
+                BuyerId = cart.BuyerId,
                 Items = cart.Items.Select(item => new CartItemDTO
                 {
-                    ProductId=item.ProductId,
-                    Name=item.Product.Name,
-                    Price=item.Product.Price,
-                    ImageUrl=item.Product.ImageUrl,
-                    ProductType=item.Product.ProductType,
-                    Brand=item.Product.Brand,
-                    Quantity=item.Quantity
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    ImageUrl = item.Product.ImageUrl,
+                    ProductType = item.Product.ProductType,
+                    Brand = item.Product.Brand,
+                    Quantity = item.Quantity
                 }).ToList()
             };
         }
+
         [HttpPost]
-        public async Task<ActionResult> AddItemToCart(int productId, int quantity)
+        public async Task<ActionResult<CartDTO>> AddItemToCart(int productId, int quantity)
         {
             //get cart
             var cart = await RetrieveBasket();
@@ -52,7 +58,7 @@ namespace api.Controllers
             cart.AddItem(product, quantity);
 
             var results = await _context.SaveChangesAsync() > 0;
-            if (results) return StatusCode(201);
+            if (results) return CreatedAtRoute("GetCart", MapCartToDTO(cart));
             return BadRequest(new ProblemDetails{Title="Problem saving product to cart"});
         }
 
@@ -88,7 +94,7 @@ namespace api.Controllers
             if (results) return Ok();
             //remove item or reduce quantity
             //save changess
-            return BadRequest("Could not delete item from cart");
+            return BadRequest(new ProblemDetails{Title="Could not delete item from cart"});
         }
     }
 }
