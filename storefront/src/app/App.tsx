@@ -6,21 +6,22 @@ import Banner from '../layouts/Banner'
 import AppRoutes from '../routes/AppRoutes'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { useStoreContext } from './context/StoreContext'
 import { getCookie } from './util/util'
 import { agent } from './api/agent'
 import LoadingComponent from '../layouts/LoadingComponent'
+import { useAppDispatch } from './store/configureStore'
+import { setCart } from '../features/Cart/cartSlice'
 
 function App() {
 
-  const {setCart} = useStoreContext()
+  const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(()=>{
     const buyerId = getCookie('buyerId')
     if (buyerId) {
       agent.Cart.get()
-        .then(cart=>setCart(cart))
+        .then(cart=>dispatch(setCart(cart)))
         .catch(error=>console.log(error))
         .finally(()=>setLoading(false))
     }
@@ -28,7 +29,7 @@ function App() {
       setLoading(false)
     }
 
-  }, [setCart])
+  }, [dispatch])
 
   if (loading) return <div className='w-full h-screen'><LoadingComponent message='Loading app...'/></div>
   return (

@@ -1,7 +1,7 @@
-import { useStoreContext } from "../../app/context/StoreContext"
 import {useEffect, useState} from 'react'
 import { Cart, CartItem } from "../../models/cart"
 import { formatCurrency } from "../../app/util/util"
+import { useAppSelecter } from "../../app/store/configureStore"
 
 const SHIPPING_FEE:number = 1299
 const FREE_SHIPPING_THRESH:number = 10000
@@ -10,7 +10,7 @@ export default function CartSummary() {
     const [subtotal, setSubtotal] = useState<number>(0)
     const [total,setTotal] = useState<number>(0)
 
-    const {cart} = useStoreContext()
+    const {cart} = useAppSelecter(state=>state.cart)
     function calculateTotal(cart:Cart) {
         let newTotal:number = cart?.items.reduce((sum:number, item:CartItem)=>{
             return sum = sum + item.price*item.quantity

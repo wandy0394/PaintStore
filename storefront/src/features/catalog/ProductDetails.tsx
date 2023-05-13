@@ -5,32 +5,30 @@ import QuantityCounter from "./QuantityCounter"
 import { useState, useEffect } from "react"
 import NotFound from "../../app/errors/NotFound"
 import LoadingComponent from "../../layouts/LoadingComponent"
-import { useStoreContext } from "../../app/context/StoreContext"
 import { CartItem } from "../../models/cart"
-import { agent } from "../../app/api/agent"
 import LoadingButton from "../../components/LoadingButton"
+import { useAppDispatch, useAppSelecter } from "../../app/store/configureStore"
+import { addCartItemAsync, removeCartItemAsync } from "../Cart/cartSlice"
 
 
 
 
 export default function ProductDetails() {
-    const {cart, setCart, removeItem} = useStoreContext()
+    const {cart, status} = useAppSelecter(state=>state.cart)
+    const dispatch = useAppDispatch()
     const {productId} = useParams<string>()
     const [product, isLoading] = useGetProductById(productId)
-    const [value, setValue] = useState<number>(1)
     const [quantity, setQuantity] = useState<number>(1)
-    const [submitting, setSubmitting] = useState<boolean>(false)
     const [item, setItem] = useState<CartItem|null>(null)
     
     
     useEffect(()=>{
         if (cart) {
-            const cartItem = cart?.items.find(item=>item.productId==Number(productId))
+            const cartItem = cart?.items?.find(item=>item.productId===Number(productId))
             if (cartItem) {
                 setQuantity(cartItem.quantity)
-                setItem(cartItem)
-                console.log(cartItem)
             }
+            setItem(cartItem)
         }
     }, [cart, productId])
     
@@ -38,44 +36,26 @@ export default function ProductDetails() {
         const newQuantity = quantity + 1
         if (newQuantity > product.quantityInStock) return
         setQuantity(newQuantity)
-        // setValue(newQuantity)
-
     }
     function handleDecrement() {
         const newQuantity = quantity - 1
         if (newQuantity < 0) return
         setQuantity(newQuantity)
-        // setValue(newQuantity)
     }
 
     function handleUpdateCart() {
-        setSubmitting(true)
         if (item) {
             if (quantity > item.quantity) {
                 const updateQuantity:number = quantity - item.quantity
-                agent.Cart.addItem(product.id, updateQuantity)
-                .then(cart=>setCart(cart))
-                .catch(error=>console.log(error))
-                .finally(()=>setSubmitting(false))
+                dispatch(addCartItemAsync({productId:product.id, quantity:updateQuantity}))
             }
             else if (quantity < item.quantity) {
                 const updateQuantity:number = item.quantity-quantity
-                agent.Cart.removeItem(product.id, updateQuantity)
-                    .then(()=>{
-                        removeItem(product.id, updateQuantity)
-                    })
-                    .catch(error=>console.log(error))
-                    .finally(()=>setSubmitting(false))
-            }
-            else {
-                setSubmitting(false)
+                dispatch(removeCartItemAsync({productId:product.id, quantity:updateQuantity}))
             }
         }
         else {
-            agent.Cart.addItem(product.id, quantity)
-                .then(cart=>setCart(cart))
-                .catch(error=>console.log(error))
-                .finally(()=>setSubmitting(false))
+            dispatch(addCartItemAsync({productId:product.id, quantity:quantity}))
         }
     }
     if (isLoading) return <LoadingComponent message='Loading product details...'/>
@@ -104,7 +84,11 @@ export default function ProductDetails() {
                                 </div>
                                 
                                 <div>Quantity in Cart: {item?item.quantity:0}</div>
-                                <LoadingButton loading={submitting}>
+                                <LoadingButton 
+                                    loading={status === ("pendingAddItem"+productId) ||
+                                        status === ("pendingRemoveItem"+productId)
+                                    }
+                                >
                                     <button
                                         disabled={item?.quantity === quantity || !item && quantity === 0} 
                                         className='btn btn-primary w-full'

@@ -8,6 +8,7 @@ import Contact from '../pages/Contact'
 import ServerError from '../app/errors/ServerError'
 import NotFound from '../app/errors/NotFound'
 import CartPage from '../features/Cart/CartPage'
+import CheckoutPage from '../features/checkout/CheckoutPage'
 
 export default function AppRoutes() {
     return (
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                 <Route path="*" element={<NotFound/>}/>
             </Route>
             <Route path="contact" element={<Contact/>}/>
+            <Route path="checkout" element={<CheckoutPage/>}/>
             <Route path="cart" element={<CartPage/>}/>
             <Route path="server-error" element={<ServerError/>}/>
             <Route path="*" element={<NotFound/>}/>

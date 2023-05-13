@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { useStoreContext } from "../app/context/StoreContext";
 import {useState, useEffect} from 'react'
+import { useAppSelecter } from "../app/store/configureStore";
 
 const links = [
     {index:0, label:'Paints', link:'/catalog/paints'},
@@ -14,11 +14,12 @@ const links = [
 
 export default function AppBar() {
     const location = useLocation()
-    const {cart} = useStoreContext()
+    const {cart} = useAppSelecter(state=>state.cart)
     const [itemCount, setItemCount] = useState<number>(0)
     
     useEffect(()=>{
-        const count:number = cart?.items.reduce((total, item)=>{
+        let count:number = 0
+        count = cart?.items?.reduce((total, item)=>{
             return total += item.quantity
         }, 0)
         setItemCount(count)
@@ -41,7 +42,7 @@ export default function AppBar() {
                 {
                     links.map((link, index)=>{
                         return (
-                            <Link to={link.link}>
+                            <Link key={index} to={link.link}>
                                 <div key={index} className={`btn btn-ghost normal-case ${(location.pathname === link.link) && 'bg-slate-400'}`}>
                                     {link.label}
                                 </div>

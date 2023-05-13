@@ -1,51 +1,14 @@
-import { useEffect, useState } from "react"
-import { agent } from "../../app/api/agent"
 import QuantityCounter from "../catalog/QuantityCounter"
 import './styles/cart-page-styles.css'
-import { useStoreContext } from "../../app/context/StoreContext"
 import LoadingButton from "../../components/LoadingButton"
 import CartSummary from "./CartSummary"
 import { formatCurrency } from "../../app/util/util"
+import { Link } from "react-router-dom"
+import { useAppDispatch, useAppSelecter } from "../../app/store/configureStore"
+import { addCartItemAsync, removeCartItemAsync } from "./cartSlice"
 export default function CartPage() {
-    const {cart, setCart, removeItem} = useStoreContext()
-    const [status, setStatus] = useState({
-        loading:false,
-        tag:''
-    })
-
-    function removeItemFromCart(productId:number, quantity:number=1, tag:string='') {
-        setStatus({
-            loading:true,
-            tag
-        })
-        agent.Cart.removeItem(productId, quantity)
-            .then(()=>{
-                removeItem(productId, quantity)
-            })
-            .catch(error=>console.log(error))
-            .finally(()=>{
-                setStatus({
-                    ...status,
-                    loading:false
-                })
-            })
-    }
-
-    function handleAddItem(productId:number, tag:string) {
-        setStatus({
-            loading:true,
-            tag
-        })
-        agent.Cart.addItem(productId)
-            .then(cart=>setCart(cart))
-            .catch(error=>console.log(error))
-            .finally(()=>{
-                setStatus({
-                    ...status,
-                    loading:false
-                })
-            })
-    }
+    const dispatch = useAppDispatch()
+    const {cart, status} = useAppSelecter(state=>state.cart)
 
     if (!cart || cart.items.length == 0) return <h1>Empty Cart</h1>
     return (
@@ -59,7 +22,7 @@ export default function CartPage() {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th></th> {/* Image */}
+                                <th>-</th> 
                                 <th>Product Name</th>
                                 <th>Quantity</th>
                                 <th>Unit Price</th>
@@ -71,7 +34,7 @@ export default function CartPage() {
                         {
                             cart.items.map((item, index)=>{
                                 return (
-                                    <tr>
+                                    <tr key={'row'+index}>
                                         <th>{index+1}</th>
                                         <td>
                                             <div className="avatar">
@@ -82,19 +45,27 @@ export default function CartPage() {
                                         </td>
                                         <td>{item.name}</td>
                                         <td>
-                                            <LoadingButton loading={status.loading && status.tag == 'qty-'+item.productId}>
+                                            {/* <LoadingButton loading={status.loading && status.tag == 'qty-'+item.productId}>
+                                             */}
+                                            <LoadingButton 
+                                                loading={
+                                                    status === ('pendingRemoveItem'+item.productId) || 
+                                                        status === ('pendingAddItem'+item.productId)}
+                                            >
+
                                                 <QuantityCounter 
                                                     value={item.quantity} 
-                                                    handleDecrement={()=>removeItemFromCart(item.productId, 1, ('qty-'+item.productId))}
-                                                    handleIncrement={()=>handleAddItem(item.productId, 'qty-'+item.productId)}
+                                                    handleDecrement={()=>dispatch(removeCartItemAsync({productId:item.productId, quantity:1}))}
+                                                    handleIncrement={()=>dispatch(addCartItemAsync({productId:item.productId}))}
                                                 />
                                             </LoadingButton>
                                         </td>
                                         <td>${formatCurrency(item.price)}</td>
                                         <td>${formatCurrency(item.price * item.quantity)}</td>
                                         <td>
-                                            <LoadingButton loading={status.loading && status.tag == 'del-'+item.productId}>
-                                                <div className='btn btn-error btn-sm' onClick={()=>removeItemFromCart(item.productId, item.quantity, 'del-'+item.productId)}>DEL</div>
+                                            {/* Suggest changing this method of checking status */}
+                                            <LoadingButton loading={status === 'pendingRemoveItem'+item.productId+'del'}>
+                                                <div className='btn btn-error btn-sm' onClick={()=>dispatch(removeCartItemAsync({productId:item.productId, quantity:item.quantity, tag:'del'}))}>DEL</div>
                                             </LoadingButton>
 
                                         </td>
@@ -108,6 +79,9 @@ export default function CartPage() {
                 <div>
                     <CartSummary/>
                 </div>
+                <Link to='/checkout'>
+                    <button className='btn btn-primary'>Checkout</button>
+                </Link>
             </div>
         </div>
     )
