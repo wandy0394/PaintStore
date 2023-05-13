@@ -6,6 +6,7 @@ import ProductImage from "./ProductImage"
 import { agent } from "../../app/api/agent"
 import LoadingButton from "../../components/LoadingButton"
 import { useStoreContext } from "../../app/context/StoreContext"
+import { formatCurrency } from "../../app/util/util"
 
 type Props = {
     product:Product
@@ -45,7 +46,7 @@ export default function ProductCard(props:Props) {
                     <ProductImage product={product}/>
                 </Link>
                 <div className="card-body">
-                    <p className='w-full text-center text-2xl'>{`$${product.price/100}`}</p>
+                    <p className='w-full text-center text-2xl'>{`$${formatCurrency(product.price)}`}</p>
                     <div className="card-actions justify-center grid grid-rows-2 place-items-center">
                         <QuantityCounter value={value} handleDecrement={handleDecrement} handleIncrement={handleIncrement}/>
                         <LoadingButton loading={loading}>

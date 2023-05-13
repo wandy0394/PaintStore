@@ -30,11 +30,11 @@ export function StoreProvider({children}:PropsWithChildren<any>) {
         items[itemIndex].quantity -= quantity
         if (items[itemIndex].quantity <= 0) {
             items.splice(itemIndex, 1)
-            setCart(prevState=>{
-                return {...prevState, items:items}
-            })
         }
-
+        setCart(prevState=>{
+            return {...prevState, items:items}
+        })
+        
     }
 
     return (
