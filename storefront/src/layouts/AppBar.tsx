@@ -1,4 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
+import { useStoreContext } from "../app/context/StoreContext";
+import {useState, useEffect} from 'react'
 
 const linkStyle = 'w-full h-full flex items-center justify-center'
 const links = [
@@ -13,6 +15,15 @@ const links = [
 
 export default function AppBar() {
     const location = useLocation()
+    const {cart} = useStoreContext()
+    const [itemCount, setItemCount] = useState<number>(0)
+    
+    useEffect(()=>{
+        const count:number = cart?.items.reduce((total, item)=>{
+            return total += item.quantity
+        }, 0)
+        setItemCount(count)
+    }, [cart])
     return (
         <div className="w-full navbar bg-base-300 px-16">
             <div className="navbar-start">
@@ -31,32 +42,35 @@ export default function AppBar() {
                 {
                     links.map((link, index)=>{
                         return (
-                            <div key={index} className={`btn btn-ghost normal-case ${(location.pathname === link.link) && 'bg-slate-400'}`}>
-                                <Link className={linkStyle} to={link.link}>
+                            <Link to={link.link}>
+                                <div key={index} className={`btn btn-ghost normal-case ${(location.pathname === link.link) && 'bg-slate-400'}`}>
                                     {link.label}
-                                </Link>
-                            </div>
+                                </div>
+                            </Link>
                         )
                     })
                 }
              
             </div>
             <div className="navbar-end flex items-center justify-end">
-                <div  className={`btn btn-ghost normal-case`}>
-                    <Link className={linkStyle} to='/cart'>
-                        Cart
-                    </Link>
-                </div>            
-                <div  className={`btn btn-ghost normal-case`}>
-                    <Link className={linkStyle} to='/'>
+                <Link  to='/cart'>
+                    <div className="indicator">
+                        <span className="indicator-item badge badge-secondary">{itemCount?itemCount:0}</span> 
+                        <div  className={`btn btn-ghost normal-case`}>
+                            Cart
+                        </div>
+                    </div>            
+                </Link>
+                <Link  to='/'>
+                    <div  className={`btn btn-ghost normal-case`}>
                         Login
-                    </Link>
-                </div>   
-                <div  className={`btn btn-ghost normal-case`}>
-                    <Link className={linkStyle} to='/'>
+                    </div>   
+                </Link>
+                <Link  to='/'>
+                    <div  className={`btn btn-ghost normal-case`}>
                         Register
-                    </Link>
-                </div>       
+                    </div>       
+                </Link>
             </div>
         </div>
     )

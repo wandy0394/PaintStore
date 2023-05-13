@@ -1,4 +1,4 @@
-// import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 // import ProductList from '../../features/ProductList'
 import AppBar from '../layouts/AppBar'
@@ -6,8 +6,31 @@ import Banner from '../layouts/Banner'
 import AppRoutes from '../routes/AppRoutes'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { useStoreContext } from './context/StoreContext'
+import { getCookie } from './util/util'
+import { agent } from './api/agent'
+import LoadingComponent from '../layouts/LoadingComponent'
 
 function App() {
+
+  const {setCart} = useStoreContext()
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(()=>{
+    const buyerId = getCookie('buyerId')
+    if (buyerId) {
+      agent.Cart.get()
+        .then(cart=>setCart(cart))
+        .catch(error=>console.log(error))
+        .finally(()=>setLoading(false))
+    }
+    else {
+      setLoading(false)
+    }
+
+  }, [setCart])
+
+  if (loading) return <div className='w-full h-screen'><LoadingComponent message='Loading app...'/></div>
   return (
     <div className='w-full h-screen border border-red-500 flex flex-col items-center'>
       <ToastContainer position='bottom-right' theme='colored'/>
@@ -19,8 +42,6 @@ function App() {
       <div className='flex-1'>
         Footer goes here
       </div>
-        {/* <Catalog products={products}/>  */}
-        {/* <ProductList products={products}/>*/}
     </div>
   )
 }
