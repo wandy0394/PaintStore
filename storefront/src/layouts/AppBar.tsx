@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useStoreContext } from "../app/context/StoreContext";
 import {useState, useEffect} from 'react'
 
-const linkStyle = 'w-full h-full flex items-center justify-center'
 const links = [
     {index:0, label:'Paints', link:'/catalog/paints'},
     {index:1, label:'Brushes', link:'/catalog/brushes'},

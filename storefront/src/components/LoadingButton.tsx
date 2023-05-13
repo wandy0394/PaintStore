@@ -9,10 +9,10 @@ export default function LoadingButton(props:Props) {
     const {loading, children} = props
     return (
         
-        <div className-='w-full h-full'>
+        <div className='w-full h-full'>
             {
                 loading ? 
-                    (<div>
+                    (<div className='flex items-center justify-center'>
                         <Spinner/>
                     </div>) 
                     : 

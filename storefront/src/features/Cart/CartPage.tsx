@@ -1,37 +1,17 @@
 import { useEffect, useState } from "react"
-import { Cart, CartItem } from "../../models/cart"
 import { agent } from "../../app/api/agent"
 import QuantityCounter from "../catalog/QuantityCounter"
 import './styles/cart-page-styles.css'
 import { useStoreContext } from "../../app/context/StoreContext"
 import LoadingButton from "../../components/LoadingButton"
-import CartSummart from "./CartSummary"
 import CartSummary from "./CartSummary"
 import { formatCurrency } from "../../app/util/util"
 export default function CartPage() {
-    
-    // const [loading, setLoading] = useState<boolean>(true)
-    // const [cart, setCart] = useState<Cart | null>(null)
-    // const [total, setTotal] = useState<number>(0)
-    const [loading, setLoading] = useState<boolean>(false)
     const {cart, setCart, removeItem} = useStoreContext()
     const [status, setStatus] = useState({
         loading:false,
         tag:''
     })
-
-    // function calculateTotal(cart:Cart) {
-    //     let newTotal:number = cart.items.reduce((sum:number, item:CartItem)=>{
-    //         return sum = sum + item.price*item.quantity
-    //     }, 0)
-        
-    //     setTotal(newTotal/100)
-    // }
-    // useEffect(()=>{
-    //     if (cart) {
-    //         calculateTotal(cart)
-    //     }
-    // }, [cart])
 
     function removeItemFromCart(productId:number, quantity:number=1, tag:string='') {
         setStatus({
@@ -52,7 +32,6 @@ export default function CartPage() {
     }
 
     function handleAddItem(productId:number, tag:string) {
-        // setLoading(true)
         setStatus({
             loading:true,
             tag
@@ -77,7 +56,6 @@ export default function CartPage() {
             <div className='flex flex-col items-end justify-center'>
                 <div className="overflow-x-auto w-full h-full">
                     <table className="table w-full h-full">
-                        {/* head */}
                         <thead>
                             <tr>
                                 <th>#</th>

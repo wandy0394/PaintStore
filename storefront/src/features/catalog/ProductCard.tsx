@@ -13,7 +13,6 @@ type Props = {
 }
 
 const MIN_QTY = 0
-const MAX_QTY = 20
 export default function ProductCard(props:Props) {
     const {product} = props
     const [value, setValue] = useState<number>(1)
@@ -47,10 +46,10 @@ export default function ProductCard(props:Props) {
                 </Link>
                 <div className="card-body">
                     <p className='w-full text-center text-2xl'>{`$${formatCurrency(product.price)}`}</p>
-                    <div className="card-actions justify-center grid grid-rows-2 place-items-center">
+                    <div className="card-actions w-full justify-center grid grid-rows-2 place-items-center">
                         <QuantityCounter value={value} handleDecrement={handleDecrement} handleIncrement={handleIncrement}/>
                         <LoadingButton loading={loading}>
-                            <button className="btn btn-primary" onClick={()=>handleAddItem(product.id)}>Add to cart</button>
+                            <button className="btn btn-primary w-full" onClick={()=>handleAddItem(product.id)}>Add to cart</button>
                         </LoadingButton>
                     </div>
                 </div>
