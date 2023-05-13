@@ -61,9 +61,9 @@ export default function CatalogSideMenu(props:Props) {
                 <div className='w-full flex flex-col items-start gap-2'>
                     <p className='text-sm'>Brands</p>
                     {
-                        getBrands(products).map(brand=>{
+                        getBrands(products).map((brand, index)=>{
                             return (
-                                <div className='flex items-center gap-4'>
+                                <div key={'brand-'+index} className='flex items-center gap-4'>
                                     <input 
                                         type="checkbox" 
                                         // checked={false} 
@@ -79,9 +79,9 @@ export default function CatalogSideMenu(props:Props) {
                 <div className='w-full flex flex-col items-start gap-2'>
                     <p className='text-sm'>Type</p>
                     {
-                        getProductTypes(products).map(type=>{
+                        getProductTypes(products).map((type, index)=>{
                             return (
-                                <div className='flex items-center gap-4'>
+                                <div key={'type-'+index} className='flex items-center gap-4'>
                                     <input 
                                         type="checkbox" 
                                         className="checkbox"

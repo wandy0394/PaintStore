@@ -54,7 +54,7 @@ namespace api.Controllers
             var cart = await RetrieveBasket();
             if (cart == null) cart = CreateCart();
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails{Title="Product not found."});
             cart.AddItem(product, quantity);
 
             var results = await _context.SaveChangesAsync() > 0;
@@ -85,15 +85,12 @@ namespace api.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveCartItem(int productId, int quantity)
         {
-            //get cart
             var cart = await RetrieveBasket();
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) return NotFound();
+            if (product == null) return BadRequest(new ProblemDetails{Title="Problem removing item from cart."});
             cart.RemoveItem(productId, quantity);
             var results = await _context.SaveChangesAsync() > 0;
             if (results) return Ok();
-            //remove item or reduce quantity
-            //save changess
             return BadRequest(new ProblemDetails{Title="Could not delete item from cart"});
         }
     }

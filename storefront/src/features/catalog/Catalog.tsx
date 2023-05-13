@@ -1,5 +1,4 @@
 import { Product } from "../../models/products"
-import ProductList from "./ProductList"
 import CatalogSideMenu from "./CatalogSideMenu"
 import { useEffect, useState } from "react"
 import ProductGrid from "./ProductGrid"
