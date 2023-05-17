@@ -4,10 +4,12 @@ import { useEffect, useState } from "react"
 import ProductGrid from "./ProductGrid"
 
 type Props = {
-    products:Product[]
+    products:Product[],
+    brands:string[],
+    productTypes:string[]
 }
 export default function Catalog(props:Props) {
-    const {products} = props
+    const {products, brands, productTypes} = props
     const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
 
     useEffect(()=>{
@@ -18,12 +20,19 @@ export default function Catalog(props:Props) {
         <>
             <div className='w-full h-full grid grid-cols-[1fr_3fr] gap-8 px-8'>
                 <CatalogSideMenu 
-                    products={products} 
-                    filteredProducts={filteredProducts} 
-                    setFilteredProducts={setFilteredProducts}
+                    brands={brands}
+                    productTypes={productTypes}
                 />
                 {/* <ProductList products={filteredProducts}/> */}
-                <ProductGrid products={filteredProducts}/>
+                <div className='w-full h-full flex flex-col items-center gap-4'>
+                    <ProductGrid products={filteredProducts}/>
+                    <div className="btn-group">
+                        <button className="btn">1</button>
+                        <button className="btn btn-active">2</button>
+                        <button className="btn">3</button>
+                        <button className="btn">4</button>
+                    </div>
+                </div>
             </div>
         </>
     )

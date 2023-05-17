@@ -2,34 +2,30 @@ import { useState } from "react"
 import { Product } from "../../models/products"
 
 type Props = {
-    products:Product[]
-    filteredProducts:Product[]
-    setFilteredProducts:React.Dispatch<React.SetStateAction<Product[]>>
+    brands:string[]
+    productTypes:string[]
 }
+
+const sortOptions = [
+    {value:'name', label:'A-Z'},
+    {value:'nameReversed', label:'Z-A'},
+    {value:'priceDesc', label:'Price - High to Low'},
+    {value:'price', label:'Price - Low to High'},
+]
 export default function CatalogSideMenu(props:Props) {
-    const {products, filteredProducts, setFilteredProducts} = props
+    const {brands, productTypes} = props
 
     const [selectedBrands, setSelectedBrands] = useState<string[]>()
     const [selectedProductTypes, setSelectedProductTypes] = useState<string[]>()
+    const [searchTerm, setSearchTerm] = useState<string>('')
 
 
-    
-    function getBrands(products:Product[]):string[] {
-        if (products === null || products === undefined) return []
-        const brands = products.map((product)=>{
-            return product.brand
-        })
-        const uniqueBrands:string[] = [...Array.from(new Set(brands))]
-        return uniqueBrands
+    function handleSearchTermChange(e) {
+        setSearchTerm(e.target.value)
     }
 
-    function getProductTypes(products:Product[]):string[] {
-        if (products === null || products === undefined) return []
-        const productTypes = products.map((product)=>{
-            return product.productType
-        })
-        const uniqueProductTypes:string[] = [...Array.from(new Set(productTypes))]
-        return uniqueProductTypes
+    function filterProducts() {
+        //make api call to get filtered products
     }
 
     function toggleBrandFilter(brand:string) {
@@ -41,27 +37,55 @@ export default function CatalogSideMenu(props:Props) {
             setSelectedBrands([...selectedBrands, brand])
         }
     }
+
     function toggleProductTypeFilter(productType:string) {
         if (productType === undefined || productType === null) return
-        if (selectedBrands.includes(productType)) {
-            setSelectedBrands([...selectedBrands].filter(selected=>selected !== productType))
+        if (selectedProductTypes.includes(productType)) {
+            setSelectedProductTypes([...selectedProductTypes].filter(selected=>selected !== productType))
         }
         else {
-            setSelectedBrands([...selectedBrands, productType])
+            setSelectedProductTypes([...selectedProductTypes, productType])
         }
     }
 
-    function filterProducts() {
-        //make api call to get filtered products
-    }
     return (
         //Filters for brand, price, product type
-        <div className='w-full h-full border border-red-300 p-8'>
+        <div className='w-full h-full'>
             <div className='w-full flex flex-col items-center justify-center gap-8'>
-                <div className='w-full flex flex-col items-start gap-2'>
-                    <p className='text-sm'>Brands</p>
+                <div className='form-control w-full'>
+                    <label className="label">
+                        <span className="label-text">Search products</span>
+                    </label>
+                    <input 
+                        className='input input-bordered w-full' 
+                        placeholder='Search...'
+                        value={searchTerm}
+                        onChange={(e)=>handleSearchTermChange(e)}
+                    />
+                </div>
+                <ul className='form-control w-full flex flex-col items-start gap-2 menu bg-base-300 rounded p-4'>
                     {
-                        getBrands(products).map((brand, index)=>{
+                        sortOptions.map((option, index)=>{
+                            return (
+                                <div key={'brand-'+index} className='flex items-center gap-4'>
+                                    <input 
+                                        type="radio" 
+                                        name="radio-1"
+                                        // checked={false} 
+                                        className="radio checked:bg-teal-500" 
+                                    />
+                                    {option.label}
+                                </div>
+                            )
+                        })
+                    }
+                </ul>
+                <ul className='w-full flex flex-col items-start gap-2 menu bg-base-300 rounded p-4'>
+                    <li className='menu-title'>
+                        <span>Brands</span>
+                    </li>
+                    {
+                        brands.map((brand, index)=>{
                             return (
                                 <div key={'brand-'+index} className='flex items-center gap-4'>
                                     <input 
@@ -75,11 +99,13 @@ export default function CatalogSideMenu(props:Props) {
                             )
                         })
                     }
-                </div>
-                <div className='w-full flex flex-col items-start gap-2'>
-                    <p className='text-sm'>Type</p>
+                </ul>
+                <ul className='w-full flex flex-col items-start gap-2 menu bg-base-300 rounded p-4'>
+                    <li className='menu-title'>
+                        <span>Product Type</span>
+                    </li>
                     {
-                        getProductTypes(products).map((type, index)=>{
+                        productTypes.map((type, index)=>{
                             return (
                                 <div key={'type-'+index} className='flex items-center gap-4'>
                                     <input 
@@ -92,7 +118,7 @@ export default function CatalogSideMenu(props:Props) {
                             )
                         })
                     }
-                </div>
+                </ul>
             </div>
         </div>
     )
