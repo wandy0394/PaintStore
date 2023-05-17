@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Product } from "../models/products";
 import {agent} from '../app/api/agent'
 
-const URL = "http://localhost:5093/api/products"
+const URL = "http://localhost:5094/api/products"
 
 
 export default function useGetProducts() : {products:Product[], isLoading:boolean} {

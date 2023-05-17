@@ -3,7 +3,7 @@ import { Product } from "../models/products";
 import axios from 'axios'
 import {agent} from '../app/api/agent'
 
-const URL = "http://localhost:5093/api/products"
+const URL = "http://localhost:5094/api/products"
 
 
 export default function useGetProductById(id:string) : [Product, boolean] {

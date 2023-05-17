@@ -469,15 +469,7 @@ $RECYCLE.BIN/
 # Windows Installer files
 *.cab
 *.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-.vscode/*
-!.vscode/settings.json
+*.msixindex.css
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json

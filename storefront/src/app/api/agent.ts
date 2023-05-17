@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
 
-axios.defaults.baseURL="http://localhost:5093/api/"
+axios.defaults.baseURL="http://localhost:5094/api/"
 axios.defaults.withCredentials=true
 import {toast} from 'react-toastify'
 
