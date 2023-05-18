@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useState } from "react"
 
 type Props = {
     title?:string
@@ -39,6 +39,7 @@ export default function CheckboxGroup(props:Props) {
                                 checked={checkedItems.includes(item)} 
                                 className="checkbox" 
                                 onClick={()=>check(item)}
+                                onChange={()=>null}
                             />
                             {item}
                         </div>

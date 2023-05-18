@@ -4,6 +4,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 axios.defaults.baseURL="http://localhost:5094/api/"
 axios.defaults.withCredentials=true
 import {toast} from 'react-toastify'
+import { PaginatedResponse } from '../../models/pagination'
 
 function responseBody(response:AxiosResponse) {
     return response.data
@@ -12,6 +13,13 @@ function responseBody(response:AxiosResponse) {
 const sleep = () => new Promise(resolve=>setTimeout(resolve, 500))
 axios.interceptors.response.use(async response => {
     await sleep()
+
+    //pagination needs to be in lowercase
+    const pagination = response.headers['pagination']
+    if (pagination) {
+        response.data = new PaginatedResponse(response.data, JSON.parse(pagination))
+        return response
+    }
     return response
 }, (error: AxiosError) =>{
     const {data, status} = error.response as AxiosResponse

@@ -20,6 +20,7 @@ export default function RadioButtonGroup(props:Props) {
                                 checked = {option.value === selectedValue}
                                 value={option.value}
                                 className="radio checked:bg-teal-500" 
+                                onChange={()=>null}
                             />
                             {option.label}
                         </div>

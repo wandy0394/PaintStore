@@ -1,8 +1,5 @@
-import { useState } from "react"
-import { Product } from "../../models/products"
 import ProductSearch from "./ProductSearch"
 import RadioButtonGroup from "../../app/components/RadioButtonGroup"
-import { useActionData } from "react-router-dom"
 import { useAppDispatch, useAppSelecter } from "../../app/store/configureStore"
 import { setProductParams } from "./catalogSlice"
 import CheckboxGroup from "../../app/components/CheckboxGroup"
@@ -32,7 +29,7 @@ export default function CatalogSideMenu(props:Props) {
                 <RadioButtonGroup 
                     options={sortOptions}
                     onChange={(e)=>{
-                        dispatch(setProductParams({orderBy:e.target.value}))
+                        dispatch(setProductParams({orderBy:e.target.value, pageNumber:1}))
                     }}
                     selectedValue={productParams.orderBy}
                 />
@@ -40,13 +37,13 @@ export default function CatalogSideMenu(props:Props) {
                     title='Brands' 
                     items={brands} 
                     checked={productParams.brands}
-                    onChange={(brands)=>dispatch(setProductParams({brands:brands}))}
+                    onChange={(brands)=>dispatch(setProductParams({brands:brands, pageNumber:1}))}
                 />
                 <CheckboxGroup 
                     title='Product Type' 
                     items={productTypes} 
                     checked={productParams.productTypes}
-                    onChange={(productTypes)=>dispatch(setProductParams({productTypes:productTypes}))}
+                    onChange={(productTypes)=>dispatch(setProductParams({productTypes:productTypes, pageNumber:1}))}
                 />
             </div>
         </div>

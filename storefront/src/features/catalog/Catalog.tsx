@@ -1,20 +1,20 @@
 import { Product } from "../../models/products"
 import CatalogSideMenu from "./CatalogSideMenu"
-import { useEffect, useState } from "react"
 import ProductGrid from "./ProductGrid"
+import { MetaData } from "../../models/pagination"
+import AppPagination from "../../app/components/AppPagination"
+import { useAppDispatch } from "../../app/store/configureStore"
+import { setProductParams } from "./catalogSlice"
 
 type Props = {
     products:Product[],
     brands:string[],
-    productTypes:string[]
+    productTypes:string[],
+    metaData:MetaData
 }
 export default function Catalog(props:Props) {
-    const {products, brands, productTypes} = props
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>(products)
-
-    useEffect(()=>{
-        setFilteredProducts(products)
-    }, [products])
+    const {products, brands, productTypes, metaData} = props
+    const dispatch = useAppDispatch()
 
     return (
         <>
@@ -23,15 +23,15 @@ export default function Catalog(props:Props) {
                     brands={brands}
                     productTypes={productTypes}
                 />
-                {/* <ProductList products={filteredProducts}/> */}
                 <div className='w-full h-full flex flex-col items-center gap-4'>
-                    <ProductGrid products={filteredProducts}/>
-                    <div className="btn-group">
-                        <button className="btn">1</button>
-                        <button className="btn btn-active">2</button>
-                        <button className="btn">3</button>
-                        <button className="btn">4</button>
-                    </div>
+                    <ProductGrid products={products}/>
+                    {
+                        metaData &&
+                            <AppPagination 
+                                metaData={metaData} 
+                                onPageChange={(page:number)=>dispatch(setProductParams({pageNumber:page}))}
+                            />
+                    }
                 </div>
             </div>
         </>

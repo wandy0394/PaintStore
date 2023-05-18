@@ -33,7 +33,7 @@ function App() {
 
   if (loading) return <div className='w-full h-screen'><LoadingComponent message='Loading app...'/></div>
   return (
-    <div className='w-full h-screen border border-red-500 flex flex-col items-center'>
+    <div className='w-full min-h-screen border border-red-500 flex flex-col items-center'>
       <ToastContainer position='bottom-right' theme='colored'/>
       <div className='w-full h-[10vh]'>
         <Banner/>

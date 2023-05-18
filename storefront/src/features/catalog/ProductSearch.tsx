@@ -1,7 +1,6 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useAppDispatch, useAppSelecter } from "../../app/store/configureStore";
 import { setProductParams } from "./catalogSlice";
-import useDebounce from "../../hooks/useDebounce";
 
 export default function ProductSearch() {
     const {productParams} = useAppSelecter(state=>state.catalog)
@@ -19,7 +18,7 @@ export default function ProductSearch() {
     }
 
     const debouceSearch = useCallback(
-        debounce((e:ChangeEvent<HTMLInputElement>)=>dispatch(setProductParams({searchTerm:e.target.value})), 750),
+        debounce((e:ChangeEvent<HTMLInputElement>)=>dispatch(setProductParams({searchTerm:e.target.value, pageNumber:1})), 750),
         []
     )
 
