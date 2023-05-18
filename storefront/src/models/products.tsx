@@ -8,3 +8,12 @@ export type Product = {
     brand:string
     quantityInStock:number
 }
+
+export type ProductParams = {
+    orderBy:string,
+    searchTerm?:string,
+    productTypes?:string[],
+    brands?:string[],
+    pageNumber:number,
+    pageSize:number
+}
