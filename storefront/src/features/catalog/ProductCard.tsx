@@ -40,7 +40,7 @@ export default function ProductCard(props:Props) {
                     <p className='w-full text-center text-2xl'>{`$${formatCurrency(product.price)}`}</p>
                     <div className="card-actions w-full justify-center grid grid-rows-2 place-items-center">
                         <QuantityCounter value={value} handleDecrement={handleDecrement} handleIncrement={handleIncrement}/>
-                        <LoadingButton loading={status.includes('pendingAddItem'+product.id)}>
+                        <LoadingButton loading={status === 'pendingAddItem'+product.id}>
                             <button className="btn btn-primary w-full" onClick={()=>dispatch(addCartItemAsync({productId:product.id}))}>Add to cart</button>
                         </LoadingButton>
                     </div>

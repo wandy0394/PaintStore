@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './App.css'
 // import ProductList from '../../features/ProductList'
 import AppBar from '../layouts/AppBar'
@@ -10,26 +10,29 @@ import { getCookie } from './util/util'
 import { agent } from './api/agent'
 import LoadingComponent from '../layouts/LoadingComponent'
 import { useAppDispatch } from './store/configureStore'
-import { setCart } from '../features/Cart/cartSlice'
+import { getCartAsync, setCart } from '../features/Cart/cartSlice'
+import { getCurrentUser } from '../features/account/accountSlice'
 
 function App() {
 
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(true)
 
-  useEffect(()=>{
-    const buyerId = getCookie('buyerId')
-    if (buyerId) {
-      agent.Cart.get()
-        .then(cart=>dispatch(setCart(cart)))
-        .catch(error=>console.log(error))
-        .finally(()=>setLoading(false))
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(getCurrentUser())
+      await dispatch(getCartAsync())
     }
-    else {
-      setLoading(false)
+    catch (e) {
+      console.log(e)
     }
-
   }, [dispatch])
+  useEffect(()=>{
+    initApp().then(()=> {
+      setLoading(false)
+    })
+
+  }, [initApp])
 
   if (loading) return <div className='w-full h-screen'><LoadingComponent message='Loading app...'/></div>
   return (

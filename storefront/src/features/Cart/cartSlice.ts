@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit"
 import { Cart } from "../../models/cart"
 import { agent } from "../../app/api/agent"
+import { getCookie } from "../../app/util/util"
 
 interface CartState {
     cart: Cart | null
@@ -38,7 +39,23 @@ export const removeCartItemAsync = createAsyncThunk<void, {productId:number, qua
         }
     }
 )
-
+export const getCartAsync = createAsyncThunk<Cart>(
+    'cart/getCartAsync',
+    async (_, thunkApi) => {
+        try {
+            return await agent.Cart.get()
+        }
+        catch (e) {
+            // console.log(e.message)
+            return thunkApi.rejectWithValue({error: e.data})
+        }
+    },
+    {
+        condition: () => {
+            if (!getCookie('buyerId')) return false
+        }
+    }
+)
 export const cartSlice = createSlice({
     name:'cart',
     initialState:initialState,
@@ -52,14 +69,7 @@ export const cartSlice = createSlice({
             console.log(action)
             state.status='pendingAddItem' + action.meta.arg.productId
         })
-        builder.addCase(addCartItemAsync.fulfilled, (state, action)=>{
-            state.cart = action.payload
-            state.status='idle'
-        })
-        builder.addCase(addCartItemAsync.rejected, (state, action)=>{
-            state.status='idle'
-            console.log(action)
-        })
+
         builder.addCase(removeCartItemAsync.pending, (state, action)=>{
             console.log(action)
             state.status='pendingRemoveItem' + action.meta.arg.productId + (action.meta.arg.tag ? action.meta.arg.tag:'')
@@ -75,6 +85,14 @@ export const cartSlice = createSlice({
             state.status='idle'
         })
         builder.addCase(removeCartItemAsync.rejected, (state, action)=>{
+            state.status='idle'
+            console.log(action)
+        })
+        builder.addMatcher(isAnyOf(addCartItemAsync.fulfilled, getCartAsync.fulfilled), (state, action)=>{
+            state.cart = action.payload
+            state.status='idle'
+        })
+        builder.addMatcher(isAnyOf(addCartItemAsync.rejected, getCartAsync.rejected), (state, action)=>{
             state.status='idle'
             console.log(action)
         })

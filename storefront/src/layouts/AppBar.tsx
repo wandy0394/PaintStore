@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import {useState, useEffect} from 'react'
 import { useAppSelecter } from "../app/store/configureStore";
+import SignedInMenu from "./SignedInMenu";
 
 const links = [
     {index:0, label:'Paints', link:'/catalog/paints'},
@@ -16,6 +17,7 @@ export default function AppBar() {
     const location = useLocation()
     const {cart} = useAppSelecter(state=>state.cart)
     const [itemCount, setItemCount] = useState<number>(0)
+    const {user} = useAppSelecter(state=>state.account)
     
     useEffect(()=>{
         let count:number = 0
@@ -61,16 +63,21 @@ export default function AppBar() {
                         </div>
                     </div>            
                 </Link>
-                <Link  to='/'>
-                    <div  className={`btn btn-ghost normal-case`}>
-                        Login
-                    </div>   
-                </Link>
-                <Link  to='/'>
-                    <div  className={`btn btn-ghost normal-case`}>
-                        Register
-                    </div>       
-                </Link>
+                {
+                    user?<SignedInMenu/>
+                        :<>
+                            <Link  to='/login'>
+                                <div  className={`btn btn-ghost normal-case`}>
+                                    Login
+                                </div>   
+                            </Link>
+                            <Link  to='/register'>
+                                <div  className={`btn btn-ghost normal-case`}>
+                                    Register
+                                </div>       
+                            </Link>
+                        </>
+                }
             </div>
         </div>
     )
