@@ -11,6 +11,7 @@ import CartPage from '../features/Cart/CartPage'
 import CheckoutPage from '../features/checkout/CheckoutPage'
 import Login from '../features/account/Login'
 import Register from '../features/account/Register'
+import RequireAuth from './RequireAuth'
 
 export default function AppRoutes() {
     return (
@@ -30,7 +31,9 @@ export default function AppRoutes() {
                 <Route path="*" element={<NotFound/>}/>
             </Route>
             <Route path="contact" element={<Contact/>}/>
-            <Route path="checkout" element={<CheckoutPage/>}/>
+            <Route element={<RequireAuth/>}>
+                <Route path="checkout" element={<CheckoutPage/>}/>
+            </Route>
             <Route path="login" element={<Login/>}/>
             <Route path="register" element={<Register/>}/>
             <Route path="cart" element={<CartPage/>}/>
