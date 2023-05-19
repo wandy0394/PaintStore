@@ -20,7 +20,7 @@ export default function Login() {
             navigate('/')
         }
         catch (e) {
-
+            console.log(e)
         }
     }
 

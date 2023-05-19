@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelecter } from "../app/store/configureStore"
 import { signOutUser } from "../features/account/accountSlice"
+import { clearCart } from "../features/Cart/cartSlice"
 
 export default function SignedInMenu() {
     const dispatch = useAppDispatch()
@@ -9,6 +10,7 @@ export default function SignedInMenu() {
 
     function handleSignOut() {
         dispatch(signOutUser())
+        dispatch(clearCart())
         navigate('/')
     }
     return (

@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Controllers.Extensions;
+using api.Data;
 using api.DTO;
 using api.Entities;
 using api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -15,8 +18,10 @@ namespace api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
-        public AccountController(UserManager<User> userManager, TokenService tokenService)
+        public readonly StoreContext _context;
+        public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
+            _context = context;
             _tokenService = tokenService;
             _userManager= userManager;
         }
@@ -27,10 +32,25 @@ namespace api.Controllers
             var user = await _userManager.FindByNameAsync(loginDTO.Username);
             if (user == null || !await _userManager.CheckPasswordAsync(user, loginDTO.Password))
                 return Unauthorized();
+
+            var userCart = await RetrieveCart(loginDTO.Username);
+            var anonCart = await RetrieveCart(Request.Cookies["buyerId"]);
+
+            if (anonCart != null)
+            {
+                if (userCart != null) _context.Carts.Remove(userCart);
+                anonCart.BuyerId = user.UserName;
+                Response.Cookies.Delete("buyerId");
+                await _context.SaveChangesAsync();
+            }
+            CartDTO cart = null;
+            if (anonCart != null) cart = anonCart.MapCartToDTO();
+            if (userCart != null) cart = userCart.MapCartToDTO();
             return new UserDTO
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Cart = cart
             };
         }
         [HttpPost("register")]
@@ -57,11 +77,27 @@ namespace api.Controllers
         public async Task<ActionResult<UserDTO>> GetCurrentUser()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userCart = await RetrieveCart(User.Identity.Name);
+
             return new UserDTO
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Cart = userCart?.MapCartToDTO()
             };
+        }
+        private async Task<Cart> RetrieveCart(string buyerId)
+        {
+            if (string.IsNullOrEmpty(buyerId)) 
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+            var cart = await _context.Carts
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(x => x.BuyerId == buyerId);
+            return cart;
         }
     }
 }
