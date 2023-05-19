@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.DTO;
 using api.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers.Extensions
 {
@@ -26,6 +27,11 @@ namespace api.Controllers.Extensions
                     Quantity = item.Quantity
                 }).ToList()
             };
+        }
+
+        public static IQueryable<Cart> RetrieveCartWIthItems(this IQueryable<Cart> query, string buyerId)
+        {
+            return query.Include(i => i.Items).ThenInclude(p => p.Product).Where(c => c.BuyerId == buyerId);
         }
     }
 }
