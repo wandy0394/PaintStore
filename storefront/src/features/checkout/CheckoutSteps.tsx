@@ -16,7 +16,7 @@ export default function CheckoutSteps(props:Props) {
             {
                 steps.map(step=>{
                     return (
-                        <li key={step.id} className={`step ${(currentStep >= step.id) && 'step-primary'}`}>Shipping Address</li>
+                        <li key={step.id} className={`step ${(currentStep >= step.id) && 'step-primary'}`}>{step.label}</li>
                     )
                 })
             }

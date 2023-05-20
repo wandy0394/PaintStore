@@ -13,6 +13,7 @@ import Login from '../features/account/Login'
 import Register from '../features/account/Register'
 import RequireAuth from './RequireAuth'
 import Orders from '../features/orders/Orders'
+import CheckoutWrapper from '../features/checkout/CheckoutWrapper'
 
 export default function AppRoutes() {
     return (
@@ -33,7 +34,7 @@ export default function AppRoutes() {
             </Route>
             <Route path="contact" element={<Contact/>}/>
             <Route element={<RequireAuth/>}>
-                <Route path="checkout" element={<CheckoutPage/>}/>
+                <Route path="checkout" element={<CheckoutWrapper/>}/>
                 <Route path="orders" element={<Orders/>}/>
             </Route>
             <Route path="login" element={<Login/>}/>

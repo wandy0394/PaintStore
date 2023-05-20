@@ -1,7 +1,9 @@
 export interface Cart {
     id: number
     buyerId: string
-    items: CartItem[]
+    items: CartItem[],
+    paymentIntentId?: string,
+    clientSecret?:string
   }
   
   export interface CartItem {

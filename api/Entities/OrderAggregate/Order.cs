@@ -13,6 +13,7 @@ namespace api.Entities.OrderAggregate
         [Required]
         public ShippingAddress ShippingAddress { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.Now;
+        public string PaymentIntentId { get; set; }
 
         public List<OrderItem> OrderItems { get; set; }
 
