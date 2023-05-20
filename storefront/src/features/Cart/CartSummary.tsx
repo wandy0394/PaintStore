@@ -34,7 +34,7 @@ export default function CartSummary() {
     }, [subtotal])
 
     return (
-        <table className='table w-full h-full'>
+        <table className='table h-full'>
             {/* <thead>
                 <th></th>
                 <th></th>
@@ -46,7 +46,7 @@ export default function CartSummary() {
                 </tr>
                 <tr>
                     <th className={th_style}>Shipping*</th>
-                    <td>${subtotal > FREE_SHIPPING_THRESH?'Free':formatCurrency(SHIPPING_FEE)}</td>
+                    <td>{subtotal > FREE_SHIPPING_THRESH?'Free':'$'+formatCurrency(SHIPPING_FEE)}</td>
                 </tr>
                 <tr>
                     <th className={th_style}>Total</th>

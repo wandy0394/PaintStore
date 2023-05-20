@@ -20,7 +20,7 @@ namespace api.Controllers
         }
 
         [HttpGet(Name = "GetCart")]
-        public async Task<ActionResult<CartDTO>> GetBasket()
+        public async Task<ActionResult<CartDTO>> GetCart()
         {
             var buyerId = GetBuyerId();
             var cart = await RetrieveCart(buyerId);
@@ -30,24 +30,6 @@ namespace api.Controllers
             return cart.MapCartToDTO();
         }
 
-        // private static CartDTO MapCartToDTO(Cart cart)
-        // {
-        //     return new CartDTO
-        //     {
-        //         Id = cart.Id,
-        //         BuyerId = cart.BuyerId,
-        //         Items = cart.Items.Select(item => new CartItemDTO
-        //         {
-        //             ProductId = item.ProductId,
-        //             Name = item.Product.Name,
-        //             Price = item.Product.Price,
-        //             ImageUrl = item.Product.ImageUrl,
-        //             ProductType = item.Product.ProductType,
-        //             Brand = item.Product.Brand,
-        //             Quantity = item.Quantity
-        //         }).ToList()
-        //     };
-        // }
 
         [HttpPost]
         public async Task<ActionResult<CartDTO>> AddItemToCart(int productId, int quantity)

@@ -86,19 +86,23 @@ namespace api.Controllers
             _context.Orders.Add(order);
             _context.Carts.Remove(cart);
 
-            if (orderDTO.SaveAddresss)
+            if (orderDTO.SaveAddress)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
-                user.Address = new UserAddress
+                var user = await _context.Users
+                    .Include(a => a.Address)
+                    .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+                var address = new UserAddress
                 {
                     FullName = orderDTO.ShippingAddress.FullName,
                     Address1 = orderDTO.ShippingAddress.Address1,
                     Address2 = orderDTO.ShippingAddress.Address2,
                     City = orderDTO.ShippingAddress.City,
                     State = orderDTO.ShippingAddress.State,
-                    Zipcode = orderDTO.ShippingAddress.FullName,
+                    Zipcode = orderDTO.ShippingAddress.Zipcode,
                     Country = orderDTO.ShippingAddress.Country
                 };
+                user.Address = address;
+                
                 _context.Update(user); 
             }
             var result = await _context.SaveChangesAsync() > 0;

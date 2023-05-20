@@ -9,7 +9,7 @@ export default function LoadingButton(props:Props) {
     const {loading, children} = props
     return (
         
-        <div className='w-full h-full'>
+        <div className=''>
             {
                 loading ? 
                     (<div className='flex items-center justify-center'>

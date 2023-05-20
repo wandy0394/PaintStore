@@ -87,14 +87,20 @@ const Cart = {
 const Account = {
     login: (values:any) => requests.post('account/login', values),
     register: (values:any) => requests.post('account/register', values),
-    currentUser: () => requests.get('account/currentUser')
+    currentUser: () => requests.get('account/currentUser'),
+    getAddress: () => requests.get('account/savedAddress')
 }
 
-
+const Orders = {
+    list: () => requests.get('orders'),
+    fetch: (id:number) => requests.get(`orders/${id}`),
+    create: (values:any) => requests.post(`orders`, values)
+}
 
 export const agent = {
     Catalog,
     TestErrors,
     Cart,
-    Account
+    Account,
+    Orders
 }

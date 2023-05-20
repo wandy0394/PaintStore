@@ -20,6 +20,7 @@ namespace api.Controllers.Extensions
                     OrderDate=order.OrderDate,
                     ShippingAddress = order.ShippingAddress,
                     ShippingFee = order.ShippingFee,
+                    Subtotal=order.Subtotal,
                     OrderStatus = order.OrderStatus.ToString(),
                     Total = order.GetTotal(),
                     OrderItems = order.OrderItems.Select(item => new OrderItemDTO
