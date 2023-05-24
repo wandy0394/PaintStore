@@ -138,23 +138,6 @@ export default function CheckoutPage() {
         }
     }
 
-    async function handleOrderClick(data:FieldValues) {
-        //temporary measure to show order success
-        const {nameOnCard, saveAddress, ...shippingAddress} = data
-        setLoading(true)
-        if (!stripe || !elements) return //stripe is not ready yet
-        try {
-            const orderNumber = await agent.Orders.create({saveAddress, shippingAddress})
-            setOrderNumber(orderNumber)
-            setStep(MAX_STEPS+1)
-            dispatch(clearCart())
-            setLoading(false);
-        }
-        catch (error) {
-            console.log(error)
-            setLoading(false);
-        }
-    }
     function getFormByStep() {
         switch (step) {
             case 1:

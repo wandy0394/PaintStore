@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
 
-axios.defaults.baseURL="http://localhost:5094/api/"
+axios.defaults.baseURL = import.meta.env.DEV ? import.meta.env.VITE_BASE_URL_DEV : import.meta.env.VITE_BASE_URL_PROD
+
 axios.defaults.withCredentials=true
 import {toast} from 'react-toastify'
 import { PaginatedResponse } from '../../models/pagination'
@@ -18,7 +19,7 @@ axios.interceptors.request.use(config => {
     return config
 })
 axios.interceptors.response.use(async response => {
-    await sleep()
+    import.meta.env.DEV && await sleep()
 
     //pagination needs to be in lowercase
     const pagination = response.headers['pagination']

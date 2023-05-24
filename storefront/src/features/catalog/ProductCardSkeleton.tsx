@@ -1,5 +1,3 @@
-import ProductImage from "./ProductImage";
-
 
 export default function ProductCardSkeleton() {
     return (

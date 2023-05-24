@@ -1,17 +1,15 @@
-import {useState, FormEvent} from 'react'
+import {useState} from 'react'
 import {Link} from 'react-router-dom'
 import {useNavigate} from 'react-router-dom'
 import { agent } from '../../app/api/agent'
 import { FieldValues, useForm } from 'react-hook-form'
-import { useAppDispatch } from '../../app/store/configureStore'
 import { toast } from 'react-toastify'
 
 
 export default function Register() {
-    const dispatch = useAppDispatch()
 
     const [validationErrors, setValidationErrors] = useState([])
-    const {register, handleSubmit, formState:{isSubmitting, errors, isValid}} = useForm({
+    const {register, handleSubmit, formState:{errors, isValid}} = useForm({
         mode:'onChange'
     })
 

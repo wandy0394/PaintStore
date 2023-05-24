@@ -5,7 +5,6 @@ import { fetchFilters, fetchProductsAsync, productsSelectors } from "../../featu
 import LoadingComponent from "../../layouts/LoadingComponent";
 
 export default function Paints() {
-    // const {products, isLoading} = useGetProducts()
     const products = useAppSelecter(productsSelectors.selectAll)
     const {productsLoaded, filtersLoaded, status, brands, productTypes, metaData} = useAppSelecter(state=>state.catalog)
     const dispatch = useAppDispatch();

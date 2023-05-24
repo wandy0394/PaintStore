@@ -18,6 +18,7 @@ export default function Contact() {
                 <button className='btn' onClick={()=> agent.TestErrors.get401Error().catch(error=>console.error(error))}>Test 401</button>
                 <button className='btn' onClick={()=> agent.TestErrors.get404Error().catch(error=>console.error(error))}>Test 404</button>
                 <button className='btn' onClick={()=> agent.TestErrors.get500Error().catch(error=>console.error(error))}>Test 500</button>
+                <button className='btn' onClick={()=> agent.TestErrors.get500Error().catch(error=>console.error(error))}>{import.meta.env.VITE_TEST}</button>
                 <button className='btn' onClick={getValidationError}>Test Validation</button>
             </div>
             {validationErrors.length > 0 && 

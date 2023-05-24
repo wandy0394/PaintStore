@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom"
-import useGetProductById from "../../hooks/useGetProductById"
 import ProductImage from "./ProductImage"
 import QuantityCounter from "./QuantityCounter"
 import { useState, useEffect } from "react"
@@ -18,7 +17,6 @@ export default function ProductDetails() {
     const {cart, status} = useAppSelecter(state=>state.cart)
     const dispatch = useAppDispatch()
     const {productId} = useParams<string>()
-    // const [product, isLoading] = useGetProductById(productId)
     const product = useAppSelecter(state => productsSelectors.selectById(state, productId))
     const {status: productStatus} = useAppSelecter(state => state.catalog)
     const [quantity, setQuantity] = useState<number>(1)

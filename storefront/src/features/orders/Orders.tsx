@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { agent } from "../../app/api/agent";
 import LoadingComponent from "../../layouts/LoadingComponent";
-import { Order, OrderItem } from "../../models/order";
-import { formatCurrency } from "../../app/util/util";
+import { Order } from "../../models/order";
 import OrdersSummary from "./OrderSummary";
 import OrderDetatils from "./OrderDetails";
 

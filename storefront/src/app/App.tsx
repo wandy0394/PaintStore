@@ -6,11 +6,9 @@ import Banner from '../layouts/Banner'
 import AppRoutes from '../routes/AppRoutes'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { getCookie } from './util/util'
-import { agent } from './api/agent'
 import LoadingComponent from '../layouts/LoadingComponent'
 import { useAppDispatch } from './store/configureStore'
-import { getCartAsync, setCart } from '../features/Cart/cartSlice'
+import { getCartAsync } from '../features/Cart/cartSlice'
 import { getCurrentUser } from '../features/account/accountSlice'
 
 function App() {
