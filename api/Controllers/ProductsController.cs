@@ -5,8 +5,11 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using api.Controllers.Extensions;
 using api.Data;
+using api.DTO;
 using api.Entities;
 using api.RequestHelpers;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,8 +18,10 @@ namespace api.Controllers
         public class ProductsController : BaseApiController
     {
         private readonly StoreContext _context;
-        public ProductsController(StoreContext context)
+        private readonly IMapper _mapper;
+        public ProductsController(StoreContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -31,12 +36,11 @@ namespace api.Controllers
                                     .AsQueryable();
             var products = await PagedList<Product>.ToPagedList(
                 query, productParams.PageNumber, productParams.PageSize);
-            // Response.Headers.Add("Pagination", JsonSerializer.Serialize(products.MetaData));
             Response.AddPaginationHeader(products.MetaData);
             return products;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
             var products =  await _context.Products.FindAsync(id);
@@ -50,6 +54,16 @@ namespace api.Controllers
             var brands = await _context.Products.Select(p=>p.Brand).Distinct().ToListAsync();
             var productTypes = await _context.Products.Select(p=>p.ProductType).Distinct().ToListAsync();
             return Ok(new {brands, productTypes});
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<ActionResult<Product>> CreateProduct(CreateProductDTO productDTO)
+        {
+            var product = _mapper.Map<Product>(productDTO);
+            _context.Products.Add(product);
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result) return CreatedAtRoute("GetProduct", new {Id = product.Id}, product);
+            return BadRequest(new ProblemDetails{Title = "Problem creating new product"});
         }
     }
 }
