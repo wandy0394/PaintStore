@@ -13,6 +13,7 @@ namespace api.RequestHelpers
         public MappingProfiles()
         {
             CreateMap<CreateProductDTO, Product>();
+            CreateMap<UpdateProductDTO, Product>();
         }
     }
 }
