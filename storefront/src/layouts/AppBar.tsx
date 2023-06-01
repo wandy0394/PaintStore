@@ -55,6 +55,16 @@ export default function AppBar() {
              
             </div>
             <div className="navbar-end flex items-center justify-end">
+                {
+                    user && 
+                    <Link  to='/inventory'>
+                        <div className="indicator">
+                            <div  className={`btn btn-ghost normal-case`}>
+                                Inventory
+                            </div>
+                        </div>            
+                    </Link>
+                }
                 <Link  to='/cart'>
                     <div className="indicator">
                         <span className="indicator-item badge badge-secondary">{itemCount?itemCount:0}</span> 

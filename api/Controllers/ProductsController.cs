@@ -57,10 +57,16 @@ namespace api.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(CreateProductDTO productDTO)
+        public async Task<ActionResult<Product>> CreateProduct([FromForm]CreateProductDTO productDTO)
         {
             var product = _mapper.Map<Product>(productDTO);
             _context.Products.Add(product);
+            if (productDTO.File != null)
+            {
+                //TODO: store image in filesystem, update product imageURL
+                //generate randomized name for image before storing, good practice
+                //product.ImageUrl = ...
+            }
             var result = await _context.SaveChangesAsync() > 0;
             if (result) return CreatedAtRoute("GetProduct", new {Id = product.Id}, product);
             return BadRequest(new ProblemDetails{Title = "Problem creating new product"});
@@ -72,6 +78,14 @@ namespace api.Controllers
             var product = await _context.Products.FindAsync(productDTO.Id);
             if (product == null) return NotFound();
             _mapper.Map(productDTO, product);
+
+            if (productDTO.File != null)
+            {
+                //TODO: store image in filesystem, update product imageURL
+                //generate randomized name for image before storing, good practice
+                //product.ImageUrl = ...
+            }
+
             var result = await _context.SaveChangesAsync() > 0;
             if (result) return NoContent();
 
@@ -83,7 +97,18 @@ namespace api.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return NotFound();
+
+            var imageUrl = product.ImageUrl;
+            if (imageUrl != null)
+            {
+                //TODO: delete image from filesystem
+            }
+
             _context.Products.Remove(product);
+
+
+
+
             var result  = await _context.SaveChangesAsync() > 0;
             if (result) return Ok();
 

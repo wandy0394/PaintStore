@@ -17,7 +17,7 @@ namespace api.DTO
         [Range(100, Double.PositiveInfinity)]
         public long Price { get; set; }
  
-        public IFormFile ImageUrl { get; set; }
+        public IFormFile File { get; set; }
         [Required]
         public string ProductType { get; set; }
         [Required]
