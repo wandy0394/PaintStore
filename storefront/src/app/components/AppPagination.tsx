@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { MetaData } from "../../models/pagination"
 
 type Props = {
@@ -8,6 +9,12 @@ type Props = {
 export default function AppPagination(props:Props) {
     const {metaData, onPageChange} = props
     const {currentPage, pageSize, totalCount, totalPages} = metaData
+    const [pageNum, setPageNum] = useState<number>(currentPage)
+
+    function handlePageChange(page:number) {
+        setPageNum(page)
+        onPageChange(page)
+    }
     return (
         <div className='w-full h-full grid grid-cols-2'>
             <span className='h-full flex items-center'>
@@ -22,8 +29,8 @@ export default function AppPagination(props:Props) {
                         return (
                             <button 
                                 key={page}
-                                className={`btn ${(page === (currentPage - 1))?'btn-active':''}` }
-                                onClick={()=>onPageChange(page+1)}
+                                className={`btn ${(page === (pageNum-1))?'btn-active':''}` }
+                                onClick={()=>handlePageChange(page+1)}
                             >
                                 {page+1}
                             </button>
