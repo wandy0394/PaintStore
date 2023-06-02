@@ -42,9 +42,9 @@ export default function InventorySummary(props:Props) {
                         </thead>
                         <tbody>
                         {
-                            products && products.map((item) => {
+                            products && products.map((item, index) => {
                                 return (
-                                    <tr>
+                                    <tr key={index}>
                                         <td>{item.id}</td>
                                         <td><img className='w-10 aspect-square' src={item.imageUrl}/></td>
                                         <td>{item.name}</td>

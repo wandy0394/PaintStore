@@ -4,6 +4,7 @@ interface Props extends UseControllerProps {
     label:string
     items:string[]
     defaultValue?:string
+    value?:string
 }
 
 export default function AppSelectList(props:Props) {
@@ -18,9 +19,8 @@ export default function AppSelectList(props:Props) {
                 className={`select select-bordered w-full ${fieldState?.error && 'border border-red-700 text-red-700'}`}
                 value={field.value}
                 onChange={field.onChange}
-                defaultValue={props.defaultValue}
+                // defaultValue={props.defaultValue}
             >
-                <option disabled selected>{props.label}</option>
                 {
                     props.items.map((item, index)=>{
                         return (

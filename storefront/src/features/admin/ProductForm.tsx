@@ -34,25 +34,25 @@ export default function ProductForm(props:Props) {
                 <AppTextInput 
                     control={control} 
                     name='name' 
-                    defaultValue={item?.name ?? ''} 
+                    value={item?.name ?? ''} 
                     label='Product Name'
                 />
                 <div className='w-full grid grid-cols-2 gap-8'>
-                    <AppSelectList control={control} items={brands} name='brand' label="Brand" defaultValue={item?.brand ?? ''}/> 
-                    <AppSelectList control={control} items={productTypes} name='productTypes' label="Product Type" defaultValue={item?.productType ?? ''}/> 
+                    <AppSelectList control={control} items={brands} name='brand' label="Brand" value={item?.brand ?? ''}/> 
+                    <AppSelectList control={control} items={productTypes} name='productTypes' label="Product Type" value={item?.productType ?? ''}/> 
                 </div>
                 <div className='w-full grid grid-cols-2 gap-8'>
                     <AppTextInput 
                         control={control} 
                         name='price' 
-                        defaultValue={item?.price.toString() ?? ''}
+                        value={item?.price.toString() ?? ''}
                         label='Price'
                         type='number'
                     />
                     <AppTextInput 
                         control={control} 
                         name='quantityInStock' 
-                        defaultValue={item?.quantityInStock.toString() ?? ''}
+                        value={item?.quantityInStock.toString() ?? ''}
                         label='Quantity'
                         type='number'
                     />
@@ -61,7 +61,7 @@ export default function ProductForm(props:Props) {
                 <AppTextInput 
                     control={control} 
                     name='description' 
-                    defaultValue={item?.description ?? ''}
+                    value={item?.description ?? ''}
                     label="Description"
                     maxLength={500}
                     multiline={true}
