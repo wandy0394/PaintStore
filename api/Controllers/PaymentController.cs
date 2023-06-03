@@ -45,6 +45,7 @@ namespace api.Controllers
         [HttpPost("webhook")]
         public async Task<ActionResult> StripeWebhook()
         {
+
             var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
             var stripeEvent = EventUtility.ConstructEvent(json, 
                 Request.Headers["Stripe-Signature"],
