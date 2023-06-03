@@ -56,7 +56,7 @@ export default function AppBar() {
             </div>
             <div className="navbar-end flex items-center justify-end">
                 {
-                    user && 
+                    user && user.roles.includes('Admin') &&
                     <Link  to='/inventory'>
                         <div className="indicator">
                             <div  className={`btn btn-ghost normal-case`}>

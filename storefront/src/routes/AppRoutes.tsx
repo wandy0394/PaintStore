@@ -32,9 +32,13 @@ export default function AppRoutes() {
                 <Route path="*" element={<NotFound/>}/>
             </Route>
             <Route path="contact" element={<Contact/>}/>
+            {/* routes that require auth */}
             <Route element={<RequireAuth/>}>
                 <Route path="checkout" element={<CheckoutWrapper/>}/>
                 <Route path="orders" element={<Orders/>}/>
+            </Route>
+            {/* routes that require admin */}
+            <Route element={<RequireAuth roles={['Admin']}/>}>
                 <Route path="inventory" element={<Inventory/>}/>
             </Route>
             <Route path="login" element={<Login/>}/>

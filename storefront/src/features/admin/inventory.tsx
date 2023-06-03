@@ -1,17 +1,12 @@
-import { useRef, useState } from "react"
-import AppPagination from "../../app/components/AppPagination"
-import { useAppDispatch } from "../../app/store/configureStore"
-import { formatCurrency } from "../../app/util/util"
+import { useState } from "react"
 import useProducts from "../../hooks/useProducts"
 import LoadingComponent from "../../layouts/LoadingComponent"
-import { setProductParams } from "../catalog/catalogSlice"
 import ProductForm from "./ProductForm"
 import InventorySummary from "./InventorySummary"
 import { Product } from "../../models/products"
 
 export default function Inventory() {
     const {products, brands, productTypes, metaData, productsLoaded} = useProducts()
-    const dispatch = useAppDispatch()
 
     const [editMode, setEditMode] = useState<boolean>(false)
     const [item, setItem] = useState<Product | null>(null)
