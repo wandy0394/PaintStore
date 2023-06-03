@@ -16,8 +16,8 @@ export default function AppDropzone(props:Props) {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     return (
-        <div {...getRootProps()} className='aspect-square h-72 bg-gray-200 hover:bg-gray-400 rounded cursor-pointer'>
-            <div className={`flex border-4 border-dashed w-full h-full rounded justify-center items-center ${isDragActive ? 'border-green-500' : 'border-gray-500'}`}>
+        <div {...getRootProps()} className={`aspect-square h-72 ${fieldState.error ? 'bg-red-200' : 'bg-gray-200'} hover:bg-gray-400 rounded cursor-pointer`}>
+            <div className={`flex flex-col border-4 border-dashed w-full h-full rounded justify-center items-center ${isDragActive ? 'border-green-500' : 'border-gray-500'}`}>
                 <input {...getInputProps()} />
                 <h4 className='text-2xl'>Drop Image Here</h4>
                 {

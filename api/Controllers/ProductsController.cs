@@ -73,7 +73,7 @@ namespace api.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult> UpdateProduct(UpdateProductDTO productDTO)
+        public async Task<ActionResult> UpdateProduct([FromForm]UpdateProductDTO productDTO)
         {
             var product = await _context.Products.FindAsync(productDTO.Id);
             if (product == null) return NotFound();

@@ -94,7 +94,6 @@ export const catalogSlice = createSlice({
         productTypes:[],
         metaData:null,
         productParams: initParams()
-
     }),
     reducers: {
         setProductParams: (state, action) => {
@@ -106,6 +105,16 @@ export const catalogSlice = createSlice({
         },
         setMetaData: (state, action) => {
             state.metaData = action.payload
+        },
+        setPageNumber: (state, action) => {
+            state.productsLoaded = false
+            state.productParams = {...state.productParams, ...action.payload}
+        },
+        setProduct: (state, action) => {
+            state.productsLoaded = false
+        },
+        removeProduct: (state, action) => {
+            state.productsLoaded = false
         }
     },
     extraReducers:(builder=>{
@@ -150,4 +159,4 @@ export const catalogSlice = createSlice({
     
 })
 export const productsSelectors = productsAdapter.getSelectors((state:RootState)=>state.catalog)
-export const {setProductParams, resetProductParms, setMetaData} = catalogSlice.actions
+export const {setProductParams, resetProductParms, setMetaData, setProduct, setPageNumber, removeProduct} = catalogSlice.actions

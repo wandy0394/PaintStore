@@ -4,6 +4,12 @@ import AppSelectList from "../../app/components/AppSelectList";
 import { Product } from "../../models/products";
 import AppDropzone from "../../components/AppDropzone";
 import { useEffect } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./productValidation";
+import { agent } from "../../app/api/agent";
+import { useAppDispatch } from "../../app/store/configureStore";
+import { setProduct } from "../catalog/catalogSlice";
+import LoadingButton from "../../components/LoadingButton";
 
 type Props = {
     item:Product | null
@@ -13,16 +19,38 @@ type Props = {
 }
 
 export default function ProductForm(props:Props) {
-    const {control, reset, handleSubmit, watch} = useForm()
+    const {control, reset, handleSubmit, watch, formState: {isDirty, isSubmitting}} = useForm({
+        resolver:yupResolver(validationSchema)
+    })
     const {item, brands, productTypes, setEditMode} = props
     const watchFile = watch('file', null)
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
-        if (item) reset (item)
-    }, [item, reset])
+        if (item && !watchFile && !isDirty) reset (item)
+
+        return () => {
+            if (watchFile) URL.revokeObjectURL(watchFile.preview)
+        }
+    }, [item, reset, watchFile, isDirty])
 
 
-    function handleSubmitData(data:FieldValues) {
+    async function handleSubmitData(data:FieldValues) {
         console.log(data)
+        try {
+            let response:Product
+            if (item) {
+                response = await agent.Admin.updateProduct(data)
+            }
+            else {
+                response = await agent.Admin.createProduct(data)
+            }
+            dispatch(setProduct(response))
+            setEditMode(false)
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -39,7 +67,7 @@ export default function ProductForm(props:Props) {
                 />
                 <div className='w-full grid grid-cols-2 gap-8'>
                     <AppSelectList control={control} items={brands} name='brand' label="Brand" value={item?.brand ?? ''}/> 
-                    <AppSelectList control={control} items={productTypes} name='productTypes' label="Product Type" value={item?.productType ?? ''}/> 
+                    <AppSelectList control={control} items={productTypes} name='productType' label="Product Type" value={item?.productType ?? ''}/> 
                 </div>
                 <div className='w-full grid grid-cols-2 gap-8'>
                     <AppTextInput 
@@ -80,7 +108,9 @@ export default function ProductForm(props:Props) {
                 </div>
                 <div className='w-full flex items-center justify-between'>
                     <div className='btn btn-secondary' onClick={()=>setEditMode(false)}>Cancel</div>
-                    <button type='submit' className='btn btn-success'>Submit</button>
+                    <LoadingButton loading={isSubmitting} >
+                        <button type='submit' className='btn btn-success'>Submit</button>
+                    </LoadingButton>
                 </div>
             </form>
         </div>

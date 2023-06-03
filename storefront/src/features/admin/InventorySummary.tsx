@@ -1,9 +1,11 @@
+import { useState } from "react"
 import AppPagination from "../../app/components/AppPagination"
 import { useAppDispatch } from "../../app/store/configureStore"
 import { formatCurrency } from "../../app/util/util"
-import useProducts from "../../hooks/useProducts"
 import { Product } from "../../models/products"
-import { setProductParams } from "../catalog/catalogSlice"
+import { removeProduct, setProductParams } from "../catalog/catalogSlice"
+import { agent } from "../../app/api/agent"
+import LoadingButton from "../../components/LoadingButton"
 
 type Props = {
     products:any
@@ -14,8 +16,18 @@ type Props = {
 export default function InventorySummary(props:Props) {
     const {products, metaData, setEditMode} = props
     const dispatch = useAppDispatch()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [target, setTarget] = useState(0)
 
 
+    function handleDeleteProduct(id:number) {
+        setLoading(true)
+        setTarget(id)
+        agent.Admin.deleteProduct(id)
+            .then(()=>dispatch(removeProduct(id)))
+            .catch(error => console.log(error))
+            .finally(()=>setLoading(false))
+    }
 
     return (    
         <div className='w-full h-full flex flex-col items-center justify-center gap-y-8'>
@@ -53,9 +65,12 @@ export default function InventorySummary(props:Props) {
                                         <td>{item.brand}</td>
                                         <td>{item.quantityInStock}</td>
                                         <td><button className='btn btn-primary btn-xs' onClick={()=>setEditMode(true, item)}>Edit</button></td>
-                                        <td><button className='btn btn-error btn-xs'>Delete</button></td>
+                                        <td>
+                                            <LoadingButton loading={loading && target === item.id}>
+                                                <button className='btn btn-error btn-xs' onClick={()=>handleDeleteProduct(item.id)}>Delete</button>
+                                            </LoadingButton>
+                                        </td>
                                     </tr>
-
                                 )
                             })
                         }
