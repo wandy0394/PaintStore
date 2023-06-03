@@ -27,7 +27,7 @@ export default function AppBar() {
         setItemCount(count)
     }, [cart])
     return (
-        <div className="w-full navbar bg-base-300 px-16">
+        <div className="w-full navbar bg-base-300 md:px-16">
             <div className="navbar-start">
                 <div className="dropdown md:hidden">
                     <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -37,6 +37,7 @@ export default function AppBar() {
                         <li><a>Acrylic</a></li>
                         <li><a>Portfolio</a></li>
                         <li><a>About</a></li>
+                        {/* <li><a>{import.meta.env.DEV ? import.meta.env.VITE_BASE_URL_DEV : import.meta.env.VITE_BASE_URL_PROD}</a></li> */}
                     </ul>
                 </div>
             </div>
@@ -54,7 +55,7 @@ export default function AppBar() {
                 }
              
             </div>
-            <div className="navbar-end flex items-center justify-end">
+            <div className="navbar-end md:flex items-center justify-end hidden">
                 {
                     user && user.roles.includes('Admin') &&
                     <Link  to='/inventory'>
