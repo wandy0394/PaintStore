@@ -19,8 +19,10 @@ namespace api.Controllers
     {
         private readonly StoreContext _context;
         private readonly IMapper _mapper;
-        public ProductsController(StoreContext context, IMapper mapper)
+        private readonly IConfiguration _config;
+        public ProductsController(StoreContext context, IMapper mapper, IConfiguration config )
         {
+            _config = config;
             _mapper = mapper;
             _context = context;
         }
@@ -61,11 +63,30 @@ namespace api.Controllers
         {
             var product = _mapper.Map<Product>(productDTO);
             _context.Products.Add(product);
-            if (productDTO.File != null)
+            if (productDTO.File != null && productDTO.File.Length > 0)
             {
-                //TODO: store image in filesystem, update product imageURL
-                //generate randomized name for image before storing, good practice
-                //product.ImageUrl = ...
+
+                //temporary solution
+                //TODO: setup dedicated filestore
+                //frontend should fetch images from filestore
+                // var randomFileName = Path.GetRandomFileName();
+                var fileName = productDTO.File.FileName;
+
+                var filePath = Path.Combine("/home/dev/Desktop/Projects/csharp/PaintStore/storefront/public/images/products", fileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await productDTO.File.CopyToAsync(stream);
+                }
+
+
+                var filePath2 = Path.Combine("/home/dev/Desktop/Projects/csharp/PaintStore/api/wwwroot/images/products", fileName);
+                using (var stream = System.IO.File.Create(filePath2))
+                {
+                    await productDTO.File.CopyToAsync(stream);
+                }
+
+                product.ImageUrl = Path.Combine(_config["StoredImagepath"], fileName);
+
             }
             var result = await _context.SaveChangesAsync() > 0;
             if (result) return CreatedAtRoute("GetProduct", new {Id = product.Id}, product);
@@ -79,14 +100,31 @@ namespace api.Controllers
             if (product == null) return NotFound();
             _mapper.Map(productDTO, product);
 
-            if (productDTO.File != null)
+            if (productDTO.File != null && productDTO.File.Length > 0)
             {
-                //TODO: store image in filesystem, update product imageURL
-                //generate randomized name for image before storing, good practice
-                //product.ImageUrl = ...
+
+                //temporary solution
+                //TODO: setup dedicated filestore
+                //frontend should fetch images from filestore
+                // var randomFileName = Path.GetRandomFileName();
+                var fileName = productDTO.File.FileName;
+
+                var filePath = Path.Combine("/home/dev/Desktop/Projects/csharp/PaintStore/storefront/public/images/products", fileName);
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await productDTO.File.CopyToAsync(stream);
+                }
+                var filePath2 = Path.Combine("/home/dev/Desktop/Projects/csharp/PaintStore/api/wwwroot/images/products", fileName);
+                using (var stream = System.IO.File.Create(filePath2))
+                {
+                    await productDTO.File.CopyToAsync(stream);
+                }
+                product.ImageUrl = Path.Combine(_config["StoredImagepath"], fileName);
+
             }
 
             var result = await _context.SaveChangesAsync() > 0;
+            Console.WriteLine(result);
             if (result) return NoContent();
 
             return BadRequest(new ProblemDetails{Title = "Problem updating products"});

@@ -110,10 +110,10 @@ export const catalogSlice = createSlice({
             state.productsLoaded = false
             state.productParams = {...state.productParams, ...action.payload}
         },
-        setProduct: (state, action) => {
+        setProduct: (state, _) => {
             state.productsLoaded = false
         },
-        removeProduct: (state, action) => {
+        removeProduct: (state, _) => {
             state.productsLoaded = false
         }
     },
