@@ -475,3 +475,5 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 api/appsettings.json
 api/store.*
+api/Dockerfile
+api/fly.toml
